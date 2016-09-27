@@ -1,0 +1,16 @@
+Sub UpdateConnections()
+    Dim con As WorkbookConnection
+    Dim ConString As String
+    Dim oldPath As String
+    Dim NewPath As String
+    
+    NewPath = "TEXT;\\server\folder\"  '"TEXT;" needs to be there not a dummy input whereas "\\server\folder\" needs to be replaced
+
+    For Each con In ThisWorkbook.Connections
+        ConString = con.Ranges.Item(1).QueryTable.Connection
+        Filename = Split(ConString, "\")(11)
+        ConString = NewPath + Filename
+        con.Ranges.Item(1).QueryTable.Connection = ConString
+      
+    Next
+End Sub

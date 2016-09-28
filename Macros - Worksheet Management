@@ -21,6 +21,7 @@ Sub Hyperlink()
 Dim i As String
 Dim j As String
 Dim t As Integer
+'set t to the number of sheets
 For t = 3 To 35
 j = "A" & t
 i = Range(j)

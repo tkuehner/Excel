@@ -1,16 +1,69 @@
-Sub UpdateConnections()
-    Dim con As WorkbookConnection
-    Dim ConString As String
-    Dim oldPath As String
-    Dim NewPath As String
-    
-    NewPath = "TEXT;\\server\folder\"  '"TEXT;" needs to be there not a dummy input whereas "\\server\folder\" needs to be replaced
 
-    For Each con In ThisWorkbook.Connections
-        ConString = con.Ranges.Item(1).QueryTable.Connection
-        Filename = Split(ConString, "\")(11)
-        ConString = NewPath + Filename
-        con.Ranges.Item(1).QueryTable.Connection = ConString
-      
+Sub UpdateConnections()
+  
+    Dim ConString As String
+    Dim OldPath As String
+    Dim NewPath As String
+    Dim w As Worksheet
+    
+    ' Set new and old path
+    OldPath = "TEXT;\\BRUDATA-DFS.BE-XCB.NET.INTRA\YDrive\BusinessData\CTBE_BusinessManagement\06-Marketing\CIS_Alteryx_Tableau\E&C\5. analyses\MT700 Matching\"
+    NewPath = "TEXT;\\BRUDATA-DFS.BE-XCB.NET.INTRA\YDrive\BusinessData\CTBE_BusinessManagement\06-Marketing\CIS_Alteryx_Tableau\E&C\99 Production Dataset\5-Workflow Monitoring\MT700 Matching\"
+  
+  For Each w In ThisWorkbook.Worksheets
+        
+    w.Select
+    Range("A1:A192").Select
+ 
+  ' workbook without connections which should be skipped
+    If w.Name = "List of Sheets" Then
+        GoTo NextSheet
+    ElseIf w.Name = "Overview" Then
+        GoTo NextSheet
+    Else: GoTo CheckPath
+    End If
+    
+CheckPath:
+   ' Check if path is wrong
+    ConString = Selection.QueryTable.Connection
+
+     If Left(NewPath, 170) = Left(ConString, 170) Then
+        GoTo NextSheet
+    Else: GoTo ChangeProperty
+    End If
+     
+ChangeProperty:
+   
+    ConString = Replace(ConString, OldPath, NewPath)
+       
+    With Selection.QueryTable
+        .Connection = ConString
+        .FieldNames = True
+        .RowNumbers = False
+        .FillAdjacentFormulas = False
+        .PreserveFormatting = True
+        .RefreshOnFileOpen = False
+        .RefreshStyle = xlInsertDeleteCells
+        .SavePassword = False
+        .SaveData = True
+        .AdjustColumnWidth = True
+        .RefreshPeriod = 0
+        .TextFilePromptOnRefresh = False
+        .TextFilePlatform = 65001
+        .TextFileStartRow = 1
+        .TextFileParseType = xlDelimited
+        .TextFileTextQualifier = xlTextQualifierDoubleQuote
+        .TextFileConsecutiveDelimiter = False
+        .TextFileTabDelimiter = False
+        .TextFileSemicolonDelimiter = False
+        .TextFileCommaDelimiter = True
+        .TextFileSpaceDelimiter = False
+        .TextFileColumnDataTypes = Array(1, 1)
+        .TextFileTrailingMinusNumbers = True
+        .Refresh BackgroundQuery:=False
+    End With
+
+        
+NextSheet:
     Next
 End Sub

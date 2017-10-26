@@ -1,7 +1,7 @@
 'unhide all sheets in workbook.
-
+Sub unhide()
 Dim ws As Worksheet
 For Each ws In ActiveWorkbook.Worksheets
 ws.Visible = xlSheetVisible
 Next ws
-End Sub3
+End Sub

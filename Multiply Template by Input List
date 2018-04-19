@@ -1,0 +1,23 @@
+Sub Makro1()
+' Im Sheet Mitarbeiter starten, eignes xlsm file
+Dim Platzhalter As String
+Dim t As Integer
+Dim i As String
+Dim j As String
+
+
+For t = 1 To 22
+j = "A" & t
+Platzhalter = Range(j)
+
+Workbooks.Open Filename:="Template.xlsx"
+
+ActiveWorkbook.SaveAs Filename:= _
+        "Template" & Platzhalter & ".xlsx" _
+        , FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+        
+ActiveWorkbook.Close
+ 
+Next
+
+End Sub
